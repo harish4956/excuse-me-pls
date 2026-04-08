@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter:wght@400;500;600;700;900&family=Courier+Prime:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: #0a0a0f;
+    color: #e8e8e8;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100svh;
+  }
+}
+
+/* ── Scanline overlay ─────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.045) 2px,
+    rgba(0, 0, 0, 0.045) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Moving scan-line sweep */
+body::after {
+  content: '';
+  position: fixed;
+  left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(transparent, rgba(0,255,136,0.015) 50%, transparent);
+  pointer-events: none;
+  z-index: 9998;
+  animation: scan-move 8s linear infinite;
+}
+
+/* ── Custom fonts ─────────────────────────────────────────────────────────── */
+.font-emergency { font-family: 'Black Ops One', cursive; }
+.font-mono-nice { font-family: 'Courier Prime', monospace; }
+
+/* ── CRT glow ─────────────────────────────────────────────────────────────── */
+.crt-glow { text-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
+
+/* ── Neon borders ─────────────────────────────────────────────────────────── */
+.neon-border-pink   { border: 2px solid #ff2d78; box-shadow: 0 0 10px #ff2d7850, inset 0 0 8px #ff2d7815; }
+.neon-border-green  { border: 2px solid #00ff88; box-shadow: 0 0 10px #00ff8850, inset 0 0 8px #00ff8815; }
+.neon-border-yellow { border: 2px solid #ffe600; box-shadow: 0 0 10px #ffe60050, inset 0 0 8px #ffe60015; }
+
+/* ── Danger stripes ───────────────────────────────────────────────────────── */
+.danger-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #1a0800, #1a0800 10px,
+    #240e00 10px, #240e00 20px
+  );
+}
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes blink        { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes blink-slow   { 0%,100%{opacity:1} 50%{opacity:.2} }
+@keyframes pulse-glow-p { 0%,100%{box-shadow:0 0 10px #ff2d78,0 0 20px #ff2d7840} 50%{box-shadow:0 0 28px #ff2d78,0 0 56px #ff2d7870} }
+@keyframes pulse-glow-g { 0%,100%{box-shadow:0 0 10px #00ff88,0 0 20px #00ff8840} 50%{box-shadow:0 0 28px #00ff88,0 0 56px #00ff8870} }
+@keyframes pulse-glow-y { 0%,100%{box-shadow:0 0 10px #ffe600,0 0 20px #ffe60040} 50%{box-shadow:0 0 28px #ffe600,0 0 56px #ffe60070} }
+@keyframes wiggle        { 0%,100%{transform:rotate(-1.5deg)} 50%{transform:rotate(1.5deg)} }
+@keyframes stamp-in      { 0%{transform:scale(3.5) rotate(-20deg);opacity:0} 55%{transform:scale(.92) rotate(4deg);opacity:1} 75%{transform:scale(1.08) rotate(-2deg)} 100%{transform:scale(1) rotate(-6deg);opacity:1} }
+@keyframes slide-up      { from{transform:translateY(36px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes shake         { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px) rotate(-1deg)} 40%{transform:translateX(6px) rotate(1deg)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+@keyframes ticker        { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+@keyframes float         { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+@keyframes glitch-1      { 0%,90%,100%{transform:translate(0)} 92%{transform:translate(-3px,1px)} 94%{transform:translate(3px,-1px)} 96%{transform:translate(-1px,2px)} 98%{transform:translate(2px,-2px)} }
+@keyframes scan-move     { from{top:-120px} to{top:100vh} }
+@keyframes flicker       { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:.7} 94%{opacity:1} 97%{opacity:.85} 98%{opacity:1} }
+@keyframes counter-pop   { 0%{transform:scale(0.5);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+@keyframes progress-fill { from{width:0%} to{width:var(--prog-w, 85%)} }
+@keyframes pulse-dot     { 0%,100%{opacity:1;transform:scaleX(1)} 50%{opacity:.4;transform:scaleX(.6)} }
+
+.animate-blink        { animation: blink 1s step-end infinite; }
+.animate-blink-slow   { animation: blink-slow 2.5s ease-in-out infinite; }
+.animate-pulse-glow   { animation: pulse-glow-p 2s ease-in-out infinite; }
+.animate-pulse-glow-g { animation: pulse-glow-g 2s ease-in-out infinite; }
+.animate-pulse-glow-y { animation: pulse-glow-y 2s ease-in-out infinite; }
+.animate-wiggle       { animation: wiggle 0.3s ease-in-out; }
+.animate-stamp-in     { animation: stamp-in 0.55s cubic-bezier(0.36,0.07,0.19,0.97) forwards; }
+.animate-slide-up     { animation: slide-up 0.4s ease-out forwards; }
+.animate-shake        { animation: shake 0.4s ease-in-out; }
+.animate-ticker       { animation: ticker 30s linear infinite; }
+.animate-float        { animation: float 3s ease-in-out infinite; }
+.animate-glitch       { animation: glitch-1 5s ease-in-out infinite; }
+.animate-flicker      { animation: flicker 6s ease-in-out infinite; }
+.animate-counter-pop  { animation: counter-pop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.animate-pulse-dot    { animation: pulse-dot 1s ease-in-out infinite; }
+
+/* Score bar */
+@keyframes fill-score { from{width:0%} to{width:var(--score-w)} }
+.score-bar-fill { animation: fill-score 1s cubic-bezier(.4,0,.2,1) .3s forwards; width:0%; }
+
+/* Button press */
+.btn-press:active { transform: scale(0.97) translateY(2px); }
+
+/* Glitch text */
+.glitch-wrap { position: relative; display: inline-block; }
+.glitch-wrap::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 2px;
+  color: #ff2d78;
+  animation: glitch-1 5s ease-in-out infinite;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Classified watermark */
+.classified-bg {
+  position: relative;
+  overflow: hidden;
+}
+.classified-bg::before {
+  content: 'CLASSIFIED';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-family: 'Black Ops One', cursive;
+  font-size: 4rem;
+  color: rgba(255, 45, 120, 0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.3em;
+}
