@@ -3,7 +3,7 @@
 
 > "For entertainment and cowardice only."
 
-A hilariously over-the-top excuse generator built like a fake emergency operations dashboard.
+An AI-powered excuse generator built like a fake emergency operations dashboard. Pick a disaster category, choose a tone, and deploy your alibi.
 
 ---
 
@@ -11,11 +11,20 @@ A hilariously over-the-top excuse generator built like a fake emergency operatio
 
 - **Vite** + **React** + **TypeScript**
 - **Tailwind CSS v4** (via `@tailwindcss/vite`)
-- No backend. No database. No auth. No nonsense.
+- **Groq API** — `llama-3.1-8b-instant` for excuse generation
 
 ---
 
 ## Setup & Run
+
+1. Get a free API key at [console.groq.com](https://console.groq.com)
+2. Create a `.env` file:
+
+```env
+VITE_GROQ_API_KEY=gsk_...your-key-here...
+```
+
+3. Install and run:
 
 ```bash
 npm install
@@ -35,31 +44,35 @@ npm run preview  # preview production build locally
 
 ```
 src/
-  data/excuses.ts          # 45 excuse templates with metadata
-  types/index.ts           # TypeScript types
-  utils/excuseEngine.ts    # random pick + score labels
+  types/index.ts              # Category, Mode, Excuse types
+  utils/
+    generateExcuse.ts         # Groq API call + prompt construction
+    excuseEngine.ts           # Score labels + confidence taglines
   components/
-    Header.tsx             # Live ticker, glitch logo, fake status badges
-    ScenarioSelector.tsx   # 6 disaster categories
-    ModeSelector.tsx       # Believable / Risky / Unhinged
-    GenerateButton.tsx     # Dramatic animated deploy button
-    ExcuseCard.tsx         # Result card with scores, evidence, copy
-    ScoreBar.tsx           # Animated score meters
+    Header.tsx                # Live ticker, glitch logo, fake status badges
+    ScenarioSelector.tsx      # 6 disaster categories
+    ModeSelector.tsx          # Genuine / Funny / Dark tone selector
+    GenerateButton.tsx        # Dramatic animated deploy button
+    ExcuseCard.tsx            # Result card with scores, evidence, copy
+    ScoreBar.tsx              # Animated score meters
+    CustomModal.tsx           # Custom situation input modal
   App.tsx
   main.tsx
-  index.css                # Custom animations, CRT effects, neon borders
+  index.css                   # Custom animations, CRT effects, neon borders
 ```
 
 ---
 
-## How to test the main flow
+## How to use
 
-1. Pick a scenario (e.g. "Late to Work")
-2. Pick a risk mode (Believable / Risky / Unhinged)
+1. Pick a scenario — **Late to Work**, **Missed Deadline**, **Skipping Plans**, **Late Reply**, **School Excuse**, or **Custom Situation**
+2. Pick a tone:
+   - **Genuine** — sincere and plausible
+   - **Funny** — absurd with unearned confidence
+   - **Dark** — chaotic and unhinged
 3. Click **DEPLOY EXCUSE** — watch the dramatic loading sequence
 4. Read your excuse, check the believability and absurdity scores
-5. Hit **COPY THIS ALIBI** — a "COPIED / DEPLOY NOW" stamp animates in
-6. Click **DEPLOY ANOTHER** to get a fresh one
+5. Hit **COPY THIS ALIBI** to copy it
 
 **Edge case:** Clicking DEPLOY without selecting a scenario shakes the selector and shows an error.
 
@@ -76,11 +89,8 @@ interface Excuse {
   believability: number;  // 1–10
   absurdity: number;      // 1–10
   fakeEvidence?: string;
-  audienceFit?: Audience[];
 }
 ```
-
-Add more excuses to `src/data/excuses.ts` — no other changes needed.
 
 ---
 
