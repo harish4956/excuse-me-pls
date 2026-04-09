@@ -7,6 +7,7 @@ import ModeSelector from './components/ModeSelector';
 import GenerateButton from './components/GenerateButton';
 import ExcuseCard from './components/ExcuseCard';
 import CustomModal from './components/CustomModal';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 
 const ERROR_MESSAGES: Record<string, string> = {
   NO_API_KEY:  'No API key found. Create a .env file with VITE_GROQ_API_KEY=gsk_... then restart the dev server.',
@@ -23,6 +24,7 @@ export default function App() {
   const [error, setError]                     = useState<string | null>(null);
   const [shakeKey, setShakeKey]               = useState(0);
   const [showCustomModal, setShowCustomModal] = useState(false);
+  const [showPrivacy, setShowPrivacy]         = useState(false);
   const [customSituation, setCustomSituation] = useState<string | null>(null);
   const abortRef                              = useRef<AbortController | null>(null);
 
@@ -124,6 +126,12 @@ export default function App() {
         <div className="text-[10px] font-mono-nice text-[#222]">
           Not responsible for terminated employment, ended friendships, or paradoxical time loops.
         </div>
+        <button
+          onClick={() => setShowPrivacy(true)}
+          className="text-[10px] font-mono-nice text-[#2a2a2a] hover:text-[#00ff88] transition-colors cursor-pointer tracking-widest uppercase"
+        >
+          Privacy Policy
+        </button>
       </footer>
 
       {showCustomModal && (
@@ -131,6 +139,10 @@ export default function App() {
           onConfirm={handleCustomConfirm}
           onCancel={() => setShowCustomModal(false)}
         />
+      )}
+
+      {showPrivacy && (
+        <PrivacyPolicyPage onClose={() => setShowPrivacy(false)} />
       )}
     </div>
   );
