@@ -1,26 +1,20 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  onClose: () => void;
-}
+export default function PrivacyPolicyPage() {
+  const navigate = useNavigate();
+  function goBack() { navigate('/'); }
 
-export default function PrivacyPolicyPage({ onClose }: Props) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') goBack();
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
-
-  // Prevent body scroll while page is open
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f] flex flex-col">
       {/* Top accent bar */}
       <div className="h-1 w-full flex-shrink-0 bg-gradient-to-r from-[#ff2d78] via-[#ffe600] to-[#00ff88]" />
 
@@ -35,7 +29,7 @@ export default function PrivacyPolicyPage({ onClose }: Props) {
           </h1>
         </div>
         <button
-          onClick={onClose}
+          onClick={goBack}
           className="text-[#444] hover:text-[#ff2d78] transition-colors text-xl leading-none cursor-pointer"
           aria-label="Close privacy policy"
         >
@@ -152,7 +146,7 @@ export default function PrivacyPolicyPage({ onClose }: Props) {
       {/* Footer close button */}
       <div className="flex-shrink-0 border-t border-[#1e1e2e] px-6 py-4 text-center">
         <button
-          onClick={onClose}
+          onClick={goBack}
           className="font-emergency text-xs tracking-widest uppercase text-[#444] hover:text-[#00ff88] transition-colors cursor-pointer"
         >
           ← BACK TO APP
